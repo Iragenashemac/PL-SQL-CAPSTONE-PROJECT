@@ -1,7 +1,7 @@
 # 📱 PL-SQL CAPSTONE PROJECT  
 ## **STOLEN PHONE & IMEI TRACKING SYSTEM**
 
-### **Author:**  
+### **Names:**  
 **IRAGENA SHEMA Cedrick — 24766**
 
 ---
