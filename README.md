@@ -65,7 +65,7 @@ A centralized PL/SQL-powered system that:
 [screenshot: ER Diagram]
 
 yaml
-Copy code
+
 
 Or:
 
@@ -88,7 +88,7 @@ CREATE TABLE USERS (
 ```
 2. PHONES
 ```sql
-Copy code
+
 CREATE TABLE PHONES (
     PHONE_ID NUMBER PRIMARY KEY,
     USER_ID NUMBER REFERENCES USERS(USER_ID),
@@ -102,7 +102,7 @@ CREATE TABLE PHONES (
 ```
 3. STOLEN_REPORTS
 ```sql
-Copy code
+
 CREATE TABLE STOLEN_REPORTS (
     REPORT_ID NUMBER PRIMARY KEY,
     PHONE_ID NUMBER REFERENCES PHONES(PHONE_ID),
@@ -114,7 +114,7 @@ CREATE TABLE STOLEN_REPORTS (
 ```
 4. IMEI_TRACKING
 ```sql
-Copy code
+
 CREATE TABLE IMEI_TRACKING (
     TRACK_ID NUMBER PRIMARY KEY,
     PHONE_ID NUMBER REFERENCES PHONES(PHONE_ID),
@@ -126,7 +126,7 @@ CREATE TABLE IMEI_TRACKING (
 ```
 5. AUDIT_LOG
 ```sql
-Copy code
+
 CREATE TABLE AUDIT_LOG (
     LOG_ID NUMBER PRIMARY KEY,
     ACTION_TYPE VARCHAR2(50),
@@ -136,7 +136,7 @@ CREATE TABLE AUDIT_LOG (
 ```
 Sequences
 ```sql
-Copy code
+
 CREATE SEQUENCE SEQ_USER START WITH 1;
 CREATE SEQUENCE SEQ_PHONE START WITH 1;
 CREATE SEQUENCE SEQ_REPORT START WITH 1;
@@ -145,10 +145,10 @@ CREATE SEQUENCE SEQ_LOG START WITH 1;
 ```
 <br/><br/>
 
-📘 PHASE 4: Triggers
+# 📘 PHASE 4: Triggers
 1. Log phone updates
-sql
-Copy code
+```sql
+
 CREATE OR REPLACE TRIGGER TRG_PHONE_UPDATE
 AFTER UPDATE ON PHONES
 FOR EACH ROW
@@ -160,9 +160,10 @@ BEGIN
         'Phone with IMEI ' || :OLD.IMEI || ' updated.'
     );
 END;
+```
 2. Auto IMEI Tracking When Reported Stolen
-sql
-Copy code
+```sql
+
 CREATE OR REPLACE TRIGGER TRG_IMEI_TRACK
 AFTER INSERT ON STOLEN_REPORTS
 FOR EACH ROW
@@ -176,9 +177,10 @@ BEGIN
         :NEW.LOCATION
     );
 END;
+```
 3. Soft Delete Protection
-sql
-Copy code
+```sql
+
 CREATE OR REPLACE TRIGGER TRG_SOFT_DELETE
 BEFORE DELETE ON PHONES
 FOR EACH ROW
@@ -188,12 +190,13 @@ BEGIN
         'Deletion is not allowed. Use soft delete instead.'
     );
 END;
+```
 <br/><br/>
 
 📘 PHASE 5: Package (SPEC + BODY)
 PACKAGE SPEC
-sql
-Copy code
+```sql
+
 CREATE OR REPLACE PACKAGE PKG_SPMS_OPS AS
 
     PROCEDURE REGISTER_USER(
@@ -222,9 +225,10 @@ CREATE OR REPLACE PACKAGE PKG_SPMS_OPS AS
 
 END PKG_SPMS_OPS;
 /
+```
 PACKAGE BODY
-sql
-Copy code
+```sql
+
 CREATE OR REPLACE PACKAGE BODY PKG_SPMS_OPS AS
 
     PROCEDURE REGISTER_USER(
@@ -273,18 +277,20 @@ CREATE OR REPLACE PACKAGE BODY PKG_SPMS_OPS AS
 
 END PKG_SPMS_OPS;
 /
+```
 <br/><br/>
 
 📘 PHASE 6: Testing & Execution
 Sample Test Block
-sql
-Copy code
+```sql
+
 BEGIN
     PKG_SPMS_OPS.REGISTER_USER('John Doe', '119988776655', '0788888888', 'john@gmail.com');
     PKG_SPMS_OPS.REGISTER_PHONE(1, '356789012345678', 'Samsung', 'S21');
     PKG_SPMS_OPS.REPORT_STOLEN(1, 1, 'Kigali City');
 END;
 /
+```
 Expected Output Screenshots
 Insert here:
 
