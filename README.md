@@ -5,7 +5,7 @@ NAMES: IRAGENA SHEMA Cedrick — 24766
 
 
 <br/>
-## 📘 PHASE 1 — Problem Definition
+## 📘 PHASE 1  Problem Definition
 Institutional / National Context
 
 Mobile phone theft has become a major security and economic challenge. Stolen devices are often resold, re-registered, or used to commit cybercrimes. Law enforcement agencies need a smart system to:
