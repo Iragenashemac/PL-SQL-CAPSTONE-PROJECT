@@ -1,71 +1,82 @@
-# PL-SQL-CAPSTONE-PROJECT : STOLEN PHONE AND IMEI TRACKING
+# 📱 PL-SQL CAPSTONE PROJECT  
+## **STOLEN PHONE & IMEI TRACKING SYSTEM**
 
-NAMES: IRAGENA SHEMA Cedrick — 24766
+### **Author:**  
+**IRAGENA SHEMA Cedrick — 24766**
 
-
+---
 
 <br/>
-## 📘 PHASE 1  Problem Definition
-Institutional / National Context
 
-Mobile phone theft has become a major security and economic challenge. Stolen devices are often resold, re-registered, or used to commit cybercrimes. Law enforcement agencies need a smart system to:
+# 📘 PHASE 1: Problem Definition
 
-Track IMEI activity
+### **Institutional / National Context**
+Mobile phone theft has become a major challenge. Stolen devices are often:
 
-Validate phone ownership
+- Re-sold illegally  
+- Re-registered with new SIM cards  
+- Used for cybercrime  
+- Used anonymously due to lack of integrated tracking  
 
-Detect stolen phones
+Law enforcement and telecoms need a system that can:
 
-Record phone movement and audits
+- Track IMEI activity  
+- Validate phone ownership  
+- Detect stolen devices  
+- Record movements & actions  
+- Provide intelligence for investigations  
 
-Help telecoms and police collaborate efficiently
+### **Data Challenge**
+There is no centralized system for:
 
-Data Challenge
+- Stolen phone reports  
+- Real-time IMEI tracking  
+- SIM history linkage  
+- Ownership verification  
+- Nationwide search & reporting  
 
-Although IMEI exists, there is no central integrated system to monitor:
-
-Stolen phone reports
-
-Device movement
-
-IMEI search history
-
-SIM history
-
-Owner verification
-
-Expected Output
-
+### **Expected Output**
 A centralized PL/SQL-powered system that:
 
-✔ Registers stolen phones
-✔ Tracks IMEI automatically
-✔ Prevents deletion through soft-delete
-✔ Logs all activities
-✔ Provides fast search & retrieval
-✔ Produces reliable audit trails
+✔ Registers users and phones  
+✔ Tracks stolen phones  
+✔ Soft-deletes instead of hard deletion  
+✔ Logs all operations automatically  
+✔ Tracks IMEI location & network  
+✔ Produces audit trails  
 
 <br/><br/>
 
-## 📘 PHASE 2 — System Architecture & ERD
-System Entities
-Entity	Description
-USERS	Registered users (citizens, police, telecom staff)
-PHONES	Mobile phones owned by users
-STOLEN_REPORTS	Theft reports submitted
-IMEI_TRACKING	IMEI tracking history
-AUDIT_LOG	Activity logs for accountability
-ER Diagram
+# 📘 PHASE 2: System Architecture & ERD
 
-👉 Screenshot Placeholder (insert here):
+### **System Entities**
+| Entity | Description |
+|-------|-------------|
+| USERS | Registered users (citizens, police, telecom staff) |
+| PHONES | Mobile phones owned by users |
+| STOLEN_REPORTS | Reports submitted for missing phones |
+| IMEI_TRACKING | History of IMEI activity |
+| AUDIT_LOG | Logs all operations |
+
+### **ER Diagram Placeholder**
+
+👉 Insert screenshot here:
+
+[screenshot: ER Diagram]
+
+yaml
+Copy code
+
+Or:
 
 ![ER Diagram](screenshots/erd.png)
 
-
 <br/><br/>
 
-## 📘 PHASE 3 — Database Schema
-1. USERS Table
+# 📘 PHASE 3: Database Schema
+
+### **1. USERS**
+```sql
 CREATE TABLE USERS (
     USER_ID NUMBER PRIMARY KEY,
     FULL_NAME VARCHAR2(200) NOT NULL,
@@ -74,8 +85,9 @@ CREATE TABLE USERS (
     EMAIL VARCHAR2(100),
     CREATED_AT DATE DEFAULT SYSDATE
 );
-
-2. PHONES Table
+2. PHONES
+sql
+Copy code
 CREATE TABLE PHONES (
     PHONE_ID NUMBER PRIMARY KEY,
     USER_ID NUMBER REFERENCES USERS(USER_ID),
@@ -86,8 +98,9 @@ CREATE TABLE PHONES (
     IS_DELETED NUMBER(1) DEFAULT 0,
     CREATED_AT DATE DEFAULT SYSDATE
 );
-
-3. STOLEN_REPORTS Table
+3. STOLEN_REPORTS
+sql
+Copy code
 CREATE TABLE STOLEN_REPORTS (
     REPORT_ID NUMBER PRIMARY KEY,
     PHONE_ID NUMBER REFERENCES PHONES(PHONE_ID),
@@ -96,8 +109,9 @@ CREATE TABLE STOLEN_REPORTS (
     REPORT_DATE DATE DEFAULT SYSDATE,
     STATUS VARCHAR2(20) DEFAULT 'PENDING'
 );
-
-4. IMEI_TRACKING Table
+4. IMEI_TRACKING
+sql
+Copy code
 CREATE TABLE IMEI_TRACKING (
     TRACK_ID NUMBER PRIMARY KEY,
     PHONE_ID NUMBER REFERENCES PHONES(PHONE_ID),
@@ -106,27 +120,29 @@ CREATE TABLE IMEI_TRACKING (
     LOCATION VARCHAR2(100),
     TRACK_DATE DATE DEFAULT SYSDATE
 );
-
-5. AUDIT_LOG Table
+5. AUDIT_LOG
+sql
+Copy code
 CREATE TABLE AUDIT_LOG (
     LOG_ID NUMBER PRIMARY KEY,
     ACTION_TYPE VARCHAR2(50),
     DESCRIPTION VARCHAR2(500),
     ACTION_DATE DATE DEFAULT SYSDATE
 );
-
 Sequences
+sql
+Copy code
 CREATE SEQUENCE SEQ_USER START WITH 1;
 CREATE SEQUENCE SEQ_PHONE START WITH 1;
 CREATE SEQUENCE SEQ_REPORT START WITH 1;
 CREATE SEQUENCE SEQ_TRACK START WITH 1;
 CREATE SEQUENCE SEQ_LOG START WITH 1;
-
-
 <br/><br/>
 
-## 📘 PHASE 4 — TRIGGERS
-Trigger: Log all phone updates
+📘 PHASE 4: Triggers
+1. Log phone updates
+sql
+Copy code
 CREATE OR REPLACE TRIGGER TRG_PHONE_UPDATE
 AFTER UPDATE ON PHONES
 FOR EACH ROW
@@ -138,8 +154,9 @@ BEGIN
         'Phone with IMEI ' || :OLD.IMEI || ' updated.'
     );
 END;
-
-Trigger: Track IMEI automatically
+2. Auto IMEI Tracking When Reported Stolen
+sql
+Copy code
 CREATE OR REPLACE TRIGGER TRG_IMEI_TRACK
 AFTER INSERT ON STOLEN_REPORTS
 FOR EACH ROW
@@ -153,20 +170,24 @@ BEGIN
         :NEW.LOCATION
     );
 END;
-
-Trigger: Soft Delete Protection
+3. Soft Delete Protection
+sql
+Copy code
 CREATE OR REPLACE TRIGGER TRG_SOFT_DELETE
 BEFORE DELETE ON PHONES
 FOR EACH ROW
 BEGIN
-    RAISE_APPLICATION_ERROR(-20555, 'Deletion is not allowed. Use soft delete instead.');
+    RAISE_APPLICATION_ERROR(
+        -20555,
+        'Deletion is not allowed. Use soft delete instead.'
+    );
 END;
-
-
 <br/><br/>
 
-## 📘 PHASE 5 — PACKAGE (SPEC + BODY)
-PACKAGE SPEC: PKG_SPMS_OPS
+📘 PHASE 5: Package (SPEC + BODY)
+PACKAGE SPEC
+sql
+Copy code
 CREATE OR REPLACE PACKAGE PKG_SPMS_OPS AS
 
     PROCEDURE REGISTER_USER(
@@ -195,8 +216,9 @@ CREATE OR REPLACE PACKAGE PKG_SPMS_OPS AS
 
 END PKG_SPMS_OPS;
 /
-
-PACKAGE BODY (FINAL FIXED VERSION)
+PACKAGE BODY
+sql
+Copy code
 CREATE OR REPLACE PACKAGE BODY PKG_SPMS_OPS AS
 
     PROCEDURE REGISTER_USER(
@@ -245,66 +267,66 @@ CREATE OR REPLACE PACKAGE BODY PKG_SPMS_OPS AS
 
 END PKG_SPMS_OPS;
 /
-
-
 <br/><br/>
 
-## 📘 PHASE 6 — Testing & Execution
-Test Data Insertion
+📘 PHASE 6: Testing & Execution
+Sample Test Block
+sql
+Copy code
 BEGIN
     PKG_SPMS_OPS.REGISTER_USER('John Doe', '119988776655', '0788888888', 'john@gmail.com');
     PKG_SPMS_OPS.REGISTER_PHONE(1, '356789012345678', 'Samsung', 'S21');
     PKG_SPMS_OPS.REPORT_STOLEN(1, 1, 'Kigali City');
 END;
 /
-
 Expected Output Screenshots
+Insert here:
 
-📌 Insert here:
+csharp
+Copy code
+[screenshot: Output 1]
+[screenshot: Output 2]
+Or:
 
-![Test Output](screenshots/output1.png)
-![IMEI Tracking](screenshots/output2.png)
+
 
 
 <br/><br/>
 
-## 📘 PHASE 7 — Results Interpretation
-✔ The system successfully:
+📘 PHASE 7: Results Interpretation
+✔ Users successfully register
+✔ Phones linked to owners
+✔ Theft reports captured
+✔ IMEI tracking auto-generated
+✔ All changes logged
+✔ Soft delete prevents data loss
 
-Registers users
+<br/><br/>
 
-Links phones to owners
-
-Logs phone theft reports
-
-Creates automatic IMEI tracking entries
-
-Logs all actions
-
-Prevents data loss through soft delete
-
-## 📘 PHASE 8 — Deployment Guide
-1. Running in SQL Developer
-@tables.sql
-@sequences.sql
-@triggers.sql
-@package_spec.sql
-@package_body.sql
-
-2. Calling procedures
+📘 PHASE 8: Deployment Guide
+Run all scripts
+less
+Copy code
+@tables.sql  
+@sequences.sql  
+@triggers.sql  
+@package_spec.sql  
+@package_body.sql  
+Call procedures
+sql
+Copy code
 EXEC PKG_SPMS_OPS.GET_PHONE_STATUS('356789012345678');
+<br/><br/>
 
-## 📘 PHASE 9 — Summary
+📘 PHASE 9: Summary
 No	Component	Description
-1	Tables	Core system data storage
+1	Tables	Core storage
 2	Triggers	Automation & audit
-3	Package	Central business logic
-4	Soft-delete	Prevents loss of evidence
-5	IMEI tracking	Core intelligence module
-## 📘 PHASE 10 — References
+3	Package	Business logic layer
+4	Soft Delete	Evidence protection
+5	IMEI Tracking	Core intelligence
 
-Oracle Official PL/SQL Documentation
+<br/><br/>
 
-GSMA IMEI Structure Documentation
-
-Rwanda National Cyber Security Authority Reports
+📘 PHASE 10: References
+Oracle PL/SQL Documentation
