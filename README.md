@@ -193,7 +193,7 @@ END;
 ```
 <br/><br/>
 
-📘 PHASE 5: Package (SPEC + BODY)
+# 📘 PHASE 5: Package (SPEC + BODY)
 PACKAGE SPEC
 ```sql
 
@@ -280,7 +280,7 @@ END PKG_SPMS_OPS;
 ```
 <br/><br/>
 
-📘 PHASE 6: Testing & Execution
+# 📘 PHASE 6: Testing & Execution
 Sample Test Block
 ```sql
 
@@ -305,7 +305,7 @@ Or:
 
 <br/><br/>
 
-📘 PHASE 7: Results Interpretation
+# 📘 PHASE 7: Results Interpretation
 ✔ Users successfully register
 ✔ Phones linked to owners
 ✔ Theft reports captured
@@ -315,22 +315,20 @@ Or:
 
 <br/><br/>
 
-📘 PHASE 8: Deployment Guide
+# 📘 PHASE 8: Deployment Guide
 Run all scripts
-less
-Copy code
+
 @tables.sql  
 @sequences.sql  
 @triggers.sql  
 @package_spec.sql  
 @package_body.sql  
 Call procedures
-sql
-Copy code
+
 EXEC PKG_SPMS_OPS.GET_PHONE_STATUS('356789012345678');
 <br/><br/>
 
-📘 PHASE 9: Summary
+# 📘 PHASE 9: Summary
 No	Component	Description
 1	Tables	Core storage
 2	Triggers	Automation & audit
@@ -340,5 +338,5 @@ No	Component	Description
 
 <br/><br/>
 
-📘 PHASE 10: References
+# 📘 PHASE 10: References
 Oracle PL/SQL Documentation
