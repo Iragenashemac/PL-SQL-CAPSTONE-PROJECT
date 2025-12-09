@@ -3,7 +3,7 @@
 NAMES: IRAGENA SHEMA Cedrick — 24766
 
 <br/>
-#PHASE 1 — Problem Definition
+# PHASE 1 — Problem Definition
 Institutional / National Context
 
 Mobile phone theft has become a major security and economic challenge. Stolen devices are often resold, re-registered, or used to commit cybercrimes. Law enforcement agencies need a smart system to:
@@ -45,7 +45,7 @@ A centralized PL/SQL-powered system that:
 
 <br/><br/>
 
-#PHASE 2 — System Architecture & ERD
+# PHASE 2 — System Architecture & ERD
 System Entities
 Entity	Description
 USERS	Registered users (citizens, police, telecom staff)
@@ -62,7 +62,7 @@ ER Diagram
 
 <br/><br/>
 
-#PHASE 3 — Database Schema
+# PHASE 3 — Database Schema
 1. USERS Table
 CREATE TABLE USERS (
     USER_ID NUMBER PRIMARY KEY,
@@ -123,7 +123,7 @@ CREATE SEQUENCE SEQ_LOG START WITH 1;
 
 <br/><br/>
 
-#PHASE 4 — TRIGGERS
+# PHASE 4 — TRIGGERS
 Trigger: Log all phone updates
 CREATE OR REPLACE TRIGGER TRG_PHONE_UPDATE
 AFTER UPDATE ON PHONES
@@ -163,7 +163,7 @@ END;
 
 <br/><br/>
 
-#PHASE 5 — PACKAGE (SPEC + BODY)
+# PHASE 5 — PACKAGE (SPEC + BODY)
 PACKAGE SPEC: PKG_SPMS_OPS
 CREATE OR REPLACE PACKAGE PKG_SPMS_OPS AS
 
@@ -247,7 +247,7 @@ END PKG_SPMS_OPS;
 
 <br/><br/>
 
-#PHASE 6 — Testing & Execution
+# PHASE 6 — Testing & Execution
 Test Data Insertion
 BEGIN
     PKG_SPMS_OPS.REGISTER_USER('John Doe', '119988776655', '0788888888', 'john@gmail.com');
@@ -266,7 +266,7 @@ Expected Output Screenshots
 
 <br/><br/>
 
-#PHASE 7 — Results Interpretation
+# PHASE 7 — Results Interpretation
 ✔ The system successfully:
 
 Registers users
@@ -281,7 +281,7 @@ Logs all actions
 
 Prevents data loss through soft delete
 
-#PHASE 8 — Deployment Guide
+# PHASE 8 — Deployment Guide
 1. Running in SQL Developer
 @tables.sql
 @sequences.sql
@@ -292,14 +292,14 @@ Prevents data loss through soft delete
 2. Calling procedures
 EXEC PKG_SPMS_OPS.GET_PHONE_STATUS('356789012345678');
 
-#PHASE 9 — Summary
+# PHASE 9 — Summary
 No	Component	Description
 1	Tables	Core system data storage
 2	Triggers	Automation & audit
 3	Package	Central business logic
 4	Soft-delete	Prevents loss of evidence
 5	IMEI tracking	Core intelligence module
-#PHASE 10 — References
+# PHASE 10 — References
 
 Oracle Official PL/SQL Documentation
 
